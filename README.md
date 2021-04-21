@@ -1,9 +1,7 @@
 # Desarrollo de Sistemas Informáticos - Grado en Ingeniería Informática - ULL
 ## Práctica 8 - Aplicación de procesamiento de notas de texto
 
-
-
-<p align="center"><b>Autor: Daniel Álvarez Medina (alu0101216126@ull.edu.es)</b><br>
+<p align="center"><b>Autor: Daniel Álvarez Medina (<a href="alu0101216126@ull.edu.es">alu0101216126@ull.edu.es</a>)</b><br><br>
   <a href="https://coveralls.io/github/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-alu0101216126?branch=main">
     <img alt="Coverage Status" src="https://coveralls.io/repos/github/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-alu0101216126/badge.svg?branch=main">
   </a>
