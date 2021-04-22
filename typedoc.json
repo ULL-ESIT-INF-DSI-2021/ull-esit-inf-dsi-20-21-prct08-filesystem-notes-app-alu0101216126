@@ -1,6 +1,9 @@
 {
     "entryPoints": [
-        "./src/mod/basicFunctions.ts"
+        "./src/mod/comision.ts",
+        "./src/mod/visa.ts",
+        "./src/mod/mastercard.ts",
+        "./src/mod/paypal.ts"
     ],
     "out": "./docs"
 }

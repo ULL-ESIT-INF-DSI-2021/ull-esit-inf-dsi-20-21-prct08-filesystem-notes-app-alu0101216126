@@ -65,9 +65,6 @@
 					<h2>Práctica 8 - Aplicación de procesamiento de notas de texto</h2>
 				</a>
 				<p align="center"><b>Autor: Daniel Álvarez Medina (<a href="alu0101216126@ull.edu.es">alu0101216126@ull.edu.es</a>)</b><br><br>
-					<a href="https://coveralls.io/github/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-alu0101216126?branch=main">
-						<img alt="Coverage Status" src="https://coveralls.io/repos/github/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-alu0101216126/badge.svg?branch=main">
-					</a>
 					<a href="https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-alu0101216126/actions/workflows/node.js.yml">
 						<img alt="Tests" src="https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-alu0101216126/actions/workflows/node.js.yml/badge.svg">
 					</a>
@@ -78,6 +75,11 @@
 						<img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=ULL-ESIT-INF-DSI-2021_ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-alu0101216126&metric=alert_status">
 					</a>
 				</p>
+				<p>La modificación se llevó a cabo en las rutas:</p>
+				<ul>
+					<li>src/mod</li>
+					<li>tests/comision.spec.ts</li>
+				</ul>
 				<p>En esta práctica, tendremos que implementar una aplicación de procesamiento de notas de texto. En concreto, la misma permitirá añadir, modificar, eliminar, listar y leer notas de un usuario concreto. Las notas se almacenarán como ficheros JSON en el sistema de ficheros de la máquina que ejecute la aplicación. Además, solo se podrá interactuar con la aplicación desde la línea de comandos.</p>
 			</div>
 		</div>
@@ -85,36 +87,24 @@
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class=" ">
-						<a href="modules.html">Exports</a>
+						<a href="modules.html">Modules</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/comision.html">comision</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/mastercard.html">mastercard</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/paypal.html">paypal</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/visa.html">visa</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
-						<a href="classes/addmapreduce.html" class="tsd-kind-icon">Add<wbr>Map<wbr>Reduce</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/addreduce.html" class="tsd-kind-icon">Add<wbr>Reduce</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/mapreduce.html" class="tsd-kind-icon">Map<wbr>Reduce</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/prodmapreduce.html" class="tsd-kind-icon">Prod<wbr>Map<wbr>Reduce</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/prodreduce.html" class="tsd-kind-icon">Prod<wbr>Reduce</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/reduce.html" class="tsd-kind-icon">Reduce</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#mul" class="tsd-kind-icon">mul</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#suma" class="tsd-kind-icon">suma</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -125,14 +115,7 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 			</ul>
 		</div>
 	</div>
