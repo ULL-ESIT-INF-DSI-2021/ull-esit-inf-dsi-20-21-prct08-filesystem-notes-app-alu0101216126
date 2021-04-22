@@ -17,7 +17,7 @@ export class Paypal extends Comision {
    * @param result Valor de la comisión
    */
   showComision(result: number) {
-    console.log(`La comisión es: ${result}`);
+    console.log(`La comisión en Paypal es: ${result}`);
   }
 
   /**
