@@ -15,6 +15,7 @@ La realización de esta práctica tiene como objetivo aprender:
 
 - El uso de la [API síncrona](https://nodejs.org/dist/latest-v15.x/docs/api/fs.html#fs_synchronous_api) proporcionada por [Node.js](https://nodejs.org/es/) para trabajar con el sistema de ficheros.
 - Familiciarnos con los paquetes [yargs](https://www.npmjs.com/package/yargs) y [chalk](https://www.npmjs.com/package/chalk)
+- El uso de [SonarCloud](https://sonarcloud.io/), que analiza y decora automáticamente las solicitudes de extracción en GitHub
 
 ### 3. Tareas previas
 
@@ -23,6 +24,7 @@ Antes de comenzar a realizar los ejercicios, deberíamos realizar las siguientes
 - Aceptar la [asignación de GitHub Classroom](https://classroom.github.com/assignment-invitations/906f18610f5e4a289890edf2c0ceb0f4/status) asociada a esta práctica.
 - Leer la documentación de [yargs](https://www.npmjs.com/package/yargs), una herramienta que permite crear una línea de comandos interactivas, analizando argumentos y generando una elegante interfaz de usuario.
 - Leer la documentación sobre [chalk](https://www.npmjs.com/package/chalk), una herramienta que permite el uso de colores en los console.log().
+- Iniciar sesión en [SonarCloud](https://sonarcloud.io/).
 
 ### 4. Ejercicio - Descripción de los requisitos de la aplicación de procesamiento de notas de texto
 
@@ -30,7 +32,7 @@ Todos el código fuente de los ejercicios realizados a continuación, deben esta
 
 Para la documentación usaremos **TypeDoc** ([Instrucciones](https://drive.google.com/file/d/19LLLCuWg7u0TjjKz9q8ZhOXgbrKtPUme/view)) y para el desarrollo dirigido por pruebas emplearemos **Mocha** y **Chai** ([Instrucciones](https://drive.google.com/file/d/1-z1oNOZP70WBDyhaaUijjHvFtqd6eAmJ/view)).
 
-Finalmente comprobaremos el cubrimiento de las pruebas mediante Coveralls, SonarCloud y las correspondientes GitHub Actions
+Finalmente comprobaremos el cubrimiento de las pruebas mediante Coveralls, SonarCloud y las correspondientes GitHub Actions. Para las correspondientes GitHub Actions, debemos incluir los siguientes ficheros: [GitHub Action, ficheros de configuración](https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-alu0101216126/tree/main/.github/workflows).
 
 ### 4.1 Enunciado
 
@@ -601,3 +603,15 @@ Como se puede observar, realizamos pruebas para las siguientes situaciones:
 * Métodos de la clase Notes, verificando que se manejan los errores correctamente.
 
 Finalmente borramos la carpeta de la base datos, ya que si no lo hacemos, al repetir la prueba, no cubriríamos el 100% del código.
+
+## 5. Conclusiones y dificultades
+
+En lo referente a la conclusión de la práctica, puedo destacar en primer lugar, el uso de la **API de sincronía de Node,js**, aplicado al sistema de ficheros, ya que en otros lenguajes ya he realizado código para sistemas de ficheros, pero con Node.js, me resultó más fácil de realizar. A su vez la herramienta `yargs` también facilitó el trabajar con un sistema de ficheros, gracias a la gran utilidad que nos aporta de forma simple, cuando empleamos la línea de comandos.
+
+Por otra parte, la herramienta `chalk`, no es dificultosa de usar, ya que simplemente cambia el color de lo que aparece en la terminal, pero aporta una mejor calidad visual, por lo que es una herramienta muy útil.
+
+Finalmente la página `SonarCloud`, realiza un análisis que deberiamos incluir en todos nuestros proyectos, ya que podremos saber desde nuestro cubrimiento de pruebas, hasta donde tengamos líneas duplicadas, y esto nos ayudará a mejorar el códgio
+
+Finalmente, en mi opinión, estas herramientas son muy útiles, por lo que las emplearía en mis proyectos de **TypeScript**, a excepción de yargs, ya que sólo sería útil cuando quiera trabajar con línea de comandos.
+
+
