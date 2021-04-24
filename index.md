@@ -32,7 +32,7 @@ Para la documentación usaremos **TypeDoc** ([Instrucciones](https://drive.googl
 
 Finalmente comprobaremos el cubrimiento de las pruebas mediante Coveralls, SonarCloud y las correspondientes GitHub Actions
 
-**Enunciado:**
+### 4.1 Enunciado
 
 Los requisitos que debe cumplir la aplicación de procesamiento de notas de texto son los siguientes:
 
@@ -61,3 +61,267 @@ Los requisitos que debe cumplir la aplicación de procesamiento de notas de text
   * Cargar una nota desde los diferentes ficheros con formato JSON almacenados en el directorio del usuario correspondiente.
 
 1. Un usuario solo puede interactuar con la aplicación de procesamiento de notas de texto a través de la línea de comandos. Los diferentes comandos, opciones de los mismos, así como manejadores asociados a cada uno de ellos deben gestionarse mediante el uso del paquete yargs.
+
+### 4.2 Código notes.ts
+
+```ts
+/* eslint-disable no-unused-vars */
+import * as fs from 'fs';
+import * as chalk from 'chalk';
+
+/**
+ * @enum colors Possible colors
+ */
+export enum colors {Red = "red", Green = "green", Blue = "blue", Yellow = "yellow"};
+
+/**
+ * Notes class to implement add, modify, delete, list and read functions at notes
+ */
+export class Notes {
+    /**
+     * @param notes Private attribute using the singleton pattern
+     */
+    private static notes: Notes;
+
+    /**
+     * Initialize attributes
+     */
+    private constructor() {}
+
+    /**
+     * During the first invocation of this method, the only instance of the Notes class is created
+     * @returns Object Notes
+     */
+    public static getNotes(): Notes {
+      if (!fs.existsSync(`./database`)) fs.mkdirSync(`./database`, {recursive: true});
+
+      if (!Notes.notes) Notes.notes = new Notes();
+
+      return Notes.notes;
+    };
+
+    /**
+     * Add a user note in .json format, to our database
+     * @param name Username
+     * @param title Notes' title
+     * @param body Body's title
+     * @param color Color's note
+     * @returns Informational message
+     */
+    addNote(name :string, title :string, body :string, color :colors): string {
+      const note = `{ "title": "${title}", "body": "${body}" , "color": "${color}" }`;
+
+      const titleJson = title.split(' ').join('');
+      // If the path user exist
+      if (fs.existsSync(`./database/${name}`)) {
+        // If don't exist a title path yet
+        if (!fs.existsSync(`./database/${name}/${titleJson}.json`)) {
+          fs.writeFileSync(`./database/${name}/${titleJson}.json`, note);
+          console.log(chalk.green(`New note added! (Title ${titleJson})`));
+          return `New note added!`;
+        }
+
+        // If already exist this title path
+        console.log(chalk.red('Note title taken!'));
+        return 'Note title taken!';
+      }
+
+      // If the path user doesn't exist
+      fs.mkdirSync(`./database/${name}`, {recursive: true});
+      fs.writeFileSync(`./database/${name}/${titleJson}.json`, note);
+      console.log(`New note added! (Title ${titleJson})`);
+      return `New note added!`;
+    }
+
+    /**
+     * Modify a user note in .json format, in our database
+     * @param name Username
+     * @param title Notes' title
+     * @param body Body's title
+     * @param color Color's note
+     * @returns Informational message
+     */
+    modifyNote(name :string, title :string, body :string, color :colors): string {
+      const note = `{ "title": "${title}", "body": "${body}" , "color": "${color}" }`;
+      const titleJson = title.split(' ').join('');
+
+      // If the path user exist
+      if (fs.existsSync(`./database/${name}`)) {
+        // If exist this title path
+        if (fs.existsSync(`./database/${name}/${titleJson}.json`)) {
+          fs.writeFileSync(`./database/${name}/${titleJson}.json`, note);
+          console.log(chalk.green(`Note overwrited! (Title ${titleJson})`));
+          return `Note overwrited!`;
+        }
+
+        // If doesn't exist this title path
+        console.log(chalk.red('Note title doesn\'t exist!'));
+        return 'Note title doesn\'t exist!';
+      }
+
+      // If the user doesn't exist
+      console.log(chalk.red('Username doesn\'t exist!'));
+      return 'Username doesn\'t exist!';
+    };
+
+    /**
+     * Remove a user note in .json format, in our database
+     * @param username Username
+     * @param title Notes' title
+     * @returns Informational message
+     */
+    removeNote(username :string, title :string) {
+      const titleName = title.split(' ').join('');
+
+      // If the path exist
+      if (fs.existsSync(`./database/${username}/${titleName}.json`)) {
+        fs.rmSync(`./database/${username}/${titleName}.json`);
+        console.log(chalk.green('Note removed!'));
+        return 'Note removed!';
+      }
+
+      // If the path doesn't exist
+      console.log(chalk.red(`Path note not found. Make sure that the user and the file name are correct, do not indicate the file extension .json`));
+      return `Path note not found. Make sure that the user and the file name are correct, do not indicate the file extension .json`;
+    }
+
+    /**
+     * List all notes from a user
+     * @param username Username
+     * @returns Informational message
+     */
+    listNotes(username :string): string {
+      let result: string = '';
+
+      // If the path user exist
+      if (fs.existsSync(`./database/${username}`)) {
+        console.log('Your notes:');
+        fs.readdirSync(`./database/${username}/`).forEach((note) => {
+          const data = fs.readFileSync(`./database/${username}/${note}`);
+          const JsonNote = JSON.parse(data.toString());
+          console.log(chalk.keyword(JsonNote.color)(JsonNote.title));
+          result += JsonNote.title + '\n';
+        });
+        return result;
+      }
+
+      // If the path user doesn't exist
+      console.log(chalk.red(`That user doesn´t exist`));
+      return `That user doesn´t exist`;
+    }
+
+    /**
+     * Read a note from a specific path
+     * @param username Username
+     * @param title Notes' title
+     * @returns Informational message
+     */
+    readNote(username :string, title :string) {
+      const titleJson = title.split(' ').join('');
+
+      // If the path exist
+      if (fs.existsSync(`./database/${username}/${titleJson}.json`)) {
+        const data = fs.readFileSync(`./database/${username}/${titleJson}.json`);
+        const JsonNote = JSON.parse(data.toString());
+        console.log(chalk.keyword(JsonNote.color)(JsonNote.title + '\n'));
+        console.log(chalk.keyword(JsonNote.color)(JsonNote.body));
+        return JsonNote.title + '\n' + JsonNote.body;
+      }
+
+      // If the path doesn't exist
+      console.log(chalk.red('Note not found'));
+      return 'Note not found';
+    }
+}
+
+```
+* **Clase Notes**
+
+En este fichero hemos creado la clase Notes, la función de esta clase será realizar las funciones de la **API síncrona de Node.js**, según se indique mediante la línea de comandos. A su vez implementamos el patrón de diseño `singleton`, ya que a la hora de trabajar con un sistema de ficheros o base de datos, el patrón `singleton` es de mucha ayuda.
+
+* **getNotes()**
+
+Con este método cumplimos el patrón `singleton`, ya que sólo permitimos una instancia de un objeto de la clase Notes.
+
+`existsSync()` y `mkdirSync()`, son funciones de la API de Node.js, estas funciones las importamos al principio del código, se encuentran almacenadas en `fs`. Con `fs` podremos usar todas las funciones de Node.js
+
+* `existsSync(./database)`: Devuelve un booleano, comprobando si la ruta existe. En el código, en caso de que sea falso, se crea el directorio mediante `mkdirSync()`, en este directorio guardaremos las notas.
+* `mkdirSync('./database', {recursive: true})`: Crea un directorio en la ruta especificada
+
+Finalmente, si el objeto Notes no estaba creado, lo crea y retorna este objeto. Si ya estaba creado simplemente retorna el objeto Notes.
+
+* **addNote()**
+
+Nos permite agregar una nota a un usuario.
+
+Parámetros:
+
+* `username`: Nombre del usuario, si no se había introducido ese usuario previamente, se crea una carpeta para dicho usuario y se incluye la nota dentro de este nuevo directorio.
+* `title`: Título de la nota. También lo empleamos para definir el nombre del fichero donde estará la nota, lo que quitamos los espacios y le añadimos la extensión `.json`. El fichero se crea mediante `writeFileSync`.
+* `body`: Contenido de la nota. Su contenido será incluido en el fichero `writeFileSync`.
+* `color`: Indica el color del texto de la nota. Esto también se especifica en el fichero mediante `writeFileSync`.
+
+Escribimos el mensaje que se incluirá en formato json, por ello hacemos: ``` const note = `{ "title": "${title}", "body": "${body}" , "color": "${color}" }` ```
+
+Aparte de las funciones síncronas ya comentadas, en este método tenemos `fs.writeFileSync('./database/${name}/${titleJson}.json', note)`, que nos permite crear un fichero con un nombre específico, en una ruta determinada, cuyo contenido también se lo indicamos nostros.
+
+Si un usuario no registrado añade una nota, primero crearemos un directorio para ese usuario y posteriormente añadiremos su nota. A su vez, si el usuario quiere añadir una nota que tiene el mismo título que otra existente, mostrará un error
+
+* **modifyNote()**
+
+Nos permite modificar una nota a un usuario.
+
+Parámetros:
+
+* `username`: Nombre del usuario, si no se había introducido ese usuario previamente, se crea una carpeta para dicho usuario y se incluye la nota dentro de este nuevo directorio.
+* `title`: Título de la nota. También lo empleamos para definir el nombre del fichero donde estará la nota, lo que quitamos los espacios y le añadimos la extensión `.json`. El fichero se crea mediante `writeFileSync`.
+* `body`: Contenido de la nota. Su contenido será incluido en el fichero `writeFileSync`.
+* `color`: Indica el color del texto de la nota. Esto también se especifica en el fichero mediante `writeFileSync`.
+
+Escribimos el mensaje que se incluirá en formato json, por ello hacemos: ``` const note = `{ "title": "${title}", "body": "${body}" , "color": "${color}" }` ```
+
+Un usuario no puede modificar una nota que no existe, a su vez como tampoco puede acceder a un usuario que no existe.
+
+* **removeNote()**
+
+Elimina una nota a un usuario.
+
+Parámetros:
+
+* `username`: Nombre del usuario.
+* `title`: Título de la nota a eliminar.
+
+Aparte de las funciones síncronas ya comentadas, en este método tenemos ```fs.rmSync(`./database/${username}/${titleName}.json`)```, que nos permite eliminar un fichero con un nombre específico, en una ruta determinada.
+
+Un usuario no puede eliminar una nota que no existe.
+
+* **listNotes()**
+
+Nos permite mostrar todas las notas de un usario.
+
+Parámetros:
+
+* `username`: Nombre del usuario.
+
+Aparte de las funciones síncronas ya comentadas, en este método tenemos: 
+* ```fs.readdirSync(`./database/${username}/`).forEach((note) => ...```: Nos permite recorrer el directorio de un usuario.
+* ```fs.readFileSync(`./database/${username}/${note}`)```: Nos permite obtener el contenido de un fichero.
+
+Convertimos lo obtenido mediante `fs.readFileSync()` a formato JSON para poder imprimirlo de una manera más legible mediante `JSON.parse()`.
+
+No se pueden mostrar notas de un usuario que no existe.
+
+* **readNote()**
+
+Nos permite leer una nota de un usario.
+
+Parámetros:
+
+* `username`: Nombre del usuario.
+* `title`: Título de la nota a leer.
+
+Convertimos lo obtenido mediante `fs.readFileSync()` a formato JSON para poder imprimirlo de una manera más legible mediante `JSON.parse()`.
+
+No se pueden mostrar la nota de un título que no existe para un usuario.
+
+
