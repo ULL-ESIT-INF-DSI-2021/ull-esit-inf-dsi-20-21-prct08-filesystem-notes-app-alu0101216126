@@ -104,11 +104,11 @@ export class Notes {
      * @returns Informational message
      */
     removeNote(username :string, title :string) {
-      const titleJson = title.split(' ').join('');
+      const titleName = title.split(' ').join('');
 
       // If the path exist
-      if (fs.existsSync(`./database/${username}/${titleJson}.json`)) {
-        fs.rmSync(`./database/${username}/${titleJson}.json`);
+      if (fs.existsSync(`./database/${username}/${titleName}.json`)) {
+        fs.rmSync(`./database/${username}/${titleName}.json`);
         console.log(chalk.green('Note removed!'));
         return 'Note removed!';
       }
