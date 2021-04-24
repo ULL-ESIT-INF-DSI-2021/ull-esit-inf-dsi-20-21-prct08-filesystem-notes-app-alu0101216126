@@ -3,7 +3,9 @@
         "./src/mod/comision.ts",
         "./src/mod/visa.ts",
         "./src/mod/mastercard.ts",
-        "./src/mod/paypal.ts"
+        "./src/mod/paypal.ts",
+        "./src/notes/notes.ts",
+        "./src/notes/app.ts"
     ],
     "out": "./docs"
 }
