@@ -614,4 +614,10 @@ Finalmente la página `SonarCloud`, realiza un análisis que deberiamos incluir 
 
 Finalmente, en mi opinión, estas herramientas son muy útiles, por lo que las emplearía en mis proyectos de **TypeScript**, a excepción de yargs, ya que sólo sería útil cuando quiera trabajar con línea de comandos.
 
+## 6. Bibliografía
 
+* [Guión práctica 8](https://ull-esit-inf-dsi-2021.github.io/prct08-filesystem-notes-app/)
+* [Documentación del paquete yargs](https://www.npmjs.com/package/yargs)
+* [Documentación del paquete chalk](https://www.npmjs.com/package/chalk)
+* [Documentación de la API síncrona de Node.js](https://nodejs.org/dist/latest-v15.x/docs/api/fs.html#fs_synchronous_api)
+* [Página SonarCloud](https://sonarcloud.io/)
