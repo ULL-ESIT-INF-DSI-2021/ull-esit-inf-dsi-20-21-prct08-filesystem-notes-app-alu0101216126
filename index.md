@@ -267,7 +267,9 @@ Escribimos el mensaje que se incluirá en formato json, por ello hacemos: ``` co
 
 Aparte de las funciones síncronas ya comentadas, en este método tenemos `fs.writeFileSync('./database/${name}/${titleJson}.json', note)`, que nos permite crear un fichero con un nombre específico, en una ruta determinada, cuyo contenido también se lo indicamos nostros.
 
-Si un usuario no registrado añade una nota, primero crearemos un directorio para ese usuario y posteriormente añadiremos su nota. A su vez, si el usuario quiere añadir una nota que tiene el mismo título que otra existente, mostrará un error
+Si un usuario no registrado añade una nota, primero crearemos un directorio para ese usuario y posteriormente añadiremos su nota. A su vez, si el usuario quiere añadir una nota que tiene el mismo título que otra existente, mostrará un error.
+
+Se puede observar que la carpeta que hará de base de datos se llama `database`.
 
 * **modifyNote()**
 
@@ -538,3 +540,64 @@ Finalmente debemos llamar a `yargs.parse()`, para procesar argumentos pasados de
   node dist/note.js read --user="daniel" --title="Red note"
   ```
 
+### 4.4 Tests TDD de la práctica
+
+Para el desarrollo dirigido por pruebas de este ejercicio se realizaron una serie de expectativas para comprobar cómo responde el ejercicio, posteriormente usaremos la herramienta **Instanbull**, para ver cuánto código cubrimos con las pruebas:
+
+```ts
+import * as fs from 'fs';
+import 'mocha';
+import {expect} from 'chai';
+import {Notes, colors} from '../src/notes/notes';
+
+const notes = Notes.getNotes();
+
+describe('Notes function test', () => {
+  it('Exist an Notes object', () => {
+    expect(notes).not.to.be.equal(null);
+  });
+
+  it('Notes.getNotes() returns the objects notes', () => {
+    expect(Notes.getNotes()).to.be.equal(notes);
+  });
+
+  it('notes.addNote() on three cases: user exist, user doesn\'t exist, note title taken', () => {
+    expect(notes.addNote('test', 'My test', 'This is a green test', colors.Green)).to.be.equal(`New note added!`);
+    expect(notes.addNote('test', 'My test 2', 'This is a red test', colors.Red)).to.be.equal(`New note added!`);
+    expect(notes.addNote('daniel', 'My test', 'This is a yellow test', colors.Yellow)).to.be.equal(`New note added!`);
+    expect(notes.addNote('test', 'My test', 'This is a blue test', colors.Blue)).to.be.equal('Note title taken!');
+  });
+
+  it('notes.modifyNote() on three cases: user exist, user doesn\'t exist, note doesn\'t exist', () => {
+    expect(notes.modifyNote('test', 'My test', 'This is a red test overwrited', colors.Red)).to.be.equal(`Note overwrited!`);
+    expect(notes.modifyNote('test', 'Fail', 'This is a green test', colors.Green)).to.be.equal('Note title doesn\'t exist!');
+    expect(notes.modifyNote('Fail', 'My test', 'This is a green test', colors.Green)).to.be.equal('Username doesn\'t exist!');
+  });
+
+  it('notes.removeNote() on two cases: user exist, user doesn\'t exist, note doesn\'t exist', () => {
+    expect(notes.removeNote('daniel', 'My test')).to.be.equal('Note removed!');
+    expect(notes.removeNote('Fail', 'Fail test')).to.be.equal(`Path note not found. Make sure that the user and the file name are correct, do not indicate the file extension .json`);
+  });
+
+  it('notes.listNotes() returns: test\nMy test\ntest\nMy test 2\n', () => {
+    expect(notes.listNotes('test')).to.be.equal('My test\nMy test 2\n');
+    expect(notes.listNotes('Fail')).to.be.equal(`That user doesn´t exist`);
+  });
+
+  it('notes.listNotes() on two cases: note found, note not found ', () => {
+    expect(notes.readNote('test', 'My test')).to.be.equal('My test\nThis is a red test overwrited');
+    expect(notes.readNote('Fail', 'Fail test')).to.be.equal('Note not found');
+  });
+});
+
+fs.rmdirSync('./database', {recursive: true});
+
+```
+
+Como se puede observar, realizamos pruebas para las siguientes situaciones:
+
+* Creación de objeto de la clase Notes.
+* Verificar funcionamiento del singleton mediantte getNotes().
+* Métodos de la clase Notes, verificando que se manejan los errores correctamente.
+
+Finalmente borramos la carpeta de la base datos, ya que si no lo hacemos, al repetir la prueba, no cubriríamos el 100% del código.
