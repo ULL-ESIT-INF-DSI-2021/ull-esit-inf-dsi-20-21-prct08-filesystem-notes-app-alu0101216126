@@ -19,7 +19,7 @@ export class Notes {
     /**
      * Initialize attributes
      */
-    constructor() {}
+    private constructor() {}
 
     /**
      * During the first invocation of this method, the only instance of the Notes class is created
