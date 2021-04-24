@@ -33,14 +33,15 @@ yargs.command({
     },
   },
   handler(argv) {
-    if (typeof argv.user === 'string' && typeof argv.title === 'string' &&
-    typeof argv.color === 'string' && typeof argv.body === 'string') {
-      let color: colors = colors.Blue;
+    let addColor: colors = colors.Blue;
 
+    if (typeof argv.user === 'string' && typeof argv.color === 'string' &&
+    typeof argv.body === 'string' && typeof argv.title === 'string') {
       Object.values(colors).forEach((element) => {
-        if (element === argv.color) color = element;
+        if (element === argv.color) addColor = element;
       });
-      notes.addNote(argv.user, argv.title, argv.body, color);
+
+      notes.addNote(argv.user, argv.title, argv.body, addColor);
     }
   },
 });
@@ -48,7 +49,7 @@ yargs.command({
 /**
  * Yargs execution of the modify command. The corresponding command line options must be included
  */
-yargs.command({
+yargs.command( {
   command: 'modify',
   describe: 'Modify an exist note',
   builder: {
@@ -57,32 +58,34 @@ yargs.command({
       demandOption: true,
       type: 'string',
     },
+
     title: {
       describe: 'Notes\' title',
       demandOption: true,
       type: 'string',
     },
+
     body: {
       describe: 'Body\'s title',
       demandOption: true,
       type: 'string',
     },
+
     color: {
-      describe: 'Color\'s note. Blue on unknown color.\nOnly red, green, blue and yellow available',
+      describe: 'Color\'s note. Blue on unknown color.',
       demandOption: true,
       type: 'string',
-      default: 'blue',
     },
   },
-  handler(argv) {
+  handler(argv: any) {
     if (typeof argv.user === 'string' && typeof argv.title === 'string' &&
     typeof argv.color === 'string' && typeof argv.body === 'string') {
-      let color: colors = colors.Blue;
+      let modifyColor: colors = colors.Blue;
 
       Object.values(colors).forEach((element) => {
-        if (element === argv.color) color = element;
+        if (element === argv.color) modifyColor = element;
       });
-      notes.modifyNote(argv.user, argv.title, argv.body, color);
+      notes.modifyNote(argv.user, argv.title, argv.body, modifyColor);
     }
   },
 });
