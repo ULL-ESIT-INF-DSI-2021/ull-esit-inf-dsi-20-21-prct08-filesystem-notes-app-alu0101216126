@@ -9,4 +9,11 @@ En esta práctica, tendremos que implementar una aplicación de procesamiento de
 
 Debemos realizar a su vez el análisis de SonarCloud, así como el funcionamiento correcto de las GitHub Actions de tests, Coveralls y SonarCloud.
 
+### 2. Objetivos
+
+La realización de esta práctica tiene como objetivo aprender:
+
+- El uso de la [API síncrona](https://nodejs.org/dist/latest-v15.x/docs/api/fs.html#fs_synchronous_api) proporcionada por [Node.js](https://nodejs.org/es/) para trabajar con el sistema de ficheros.
+- Familiciarnos con los paquetes [yargs](https://www.npmjs.com/package/yargs) y [chalk](https://www.npmjs.com/package/chalk)
+
 
