@@ -41,6 +41,7 @@ describe('Notes function test', () => {
     expect(notes.readNote('test', 'My test')).to.be.equal('My test\nThis is a red test overwrited');
     expect(notes.readNote('Fail', 'Fail test')).to.be.equal('Note not found');
   });
+  fs.rmdirSync('./database', {recursive: true});
 });
 
-fs.rmdirSync('./database', {recursive: true});
+
