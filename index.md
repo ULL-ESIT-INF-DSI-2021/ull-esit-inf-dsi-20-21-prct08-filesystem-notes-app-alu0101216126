@@ -239,6 +239,8 @@ export class Notes {
 
 En este fichero hemos creado la clase Notes, la función de esta clase será realizar las funciones de la **API síncrona de Node.js**, según se indique mediante la línea de comandos. A su vez implementamos el patrón de diseño `singleton`, ya que a la hora de trabajar con un sistema de ficheros o base de datos, el patrón `singleton` es de mucha ayuda.
 
+Cabe destacar que en todos los `console.log()`, indicamos el color mediante la herramienta `chalk`, sabemos el color según si es un mensaje de error, de información o si es una nota (que tiene que ir en el color indicado de la nota). Para ello dentro del console.log debemos escribir: `chalk.color()` donde `color` hace referencia al color que queremos usar. También se puede obtener el color a través de una variables si usamos: `chalk.keyword()`.
+
 * **getNotes()**
 
 Con este método cumplimos el patrón `singleton`, ya que sólo permitimos una instancia de un objeto de la clase Notes.
@@ -324,4 +326,215 @@ Convertimos lo obtenido mediante `fs.readFileSync()` a formato JSON para poder i
 
 No se pueden mostrar la nota de un título que no existe para un usuario.
 
+### 4.3 Código app.ts
+
+```ts
+import {Notes, colors} from './notes';
+import * as yargs from 'yargs';
+
+const notes :Notes = Notes.getNotes();
+
+/**
+ * Yargs execution of the add command. The corresponding command line options must be included
+ */
+yargs.command({
+  command: 'add',
+  describe: 'Add a new note',
+  builder: {
+    user: {
+      describe: 'Username',
+      demandOption: true,
+      type: 'string',
+    },
+    title: {
+      describe: 'Notes\' title',
+      demandOption: true,
+      type: 'string',
+    },
+    body: {
+      describe: 'Body\'s title',
+      demandOption: true,
+      type: 'string',
+    },
+    color: {
+      describe: 'Color\'s note. Blue on unknown color.\nOnly red, green, blue and yellow available',
+      demandOption: true,
+      type: 'string',
+      default: 'blue',
+    },
+  },
+  handler(argv) {
+    let addColor: colors = colors.Blue;
+
+    if (typeof argv.user === 'string' && typeof argv.color === 'string' &&
+    typeof argv.body === 'string' && typeof argv.title === 'string') {
+      Object.values(colors).forEach((element) => {
+        if (element === argv.color) addColor = element;
+      });
+
+      notes.addNote(argv.user, argv.title, argv.body, addColor);
+    }
+  },
+});
+
+/**
+ * Yargs execution of the modify command. The corresponding command line options must be included
+ */
+yargs.command( {
+  command: 'modify',
+  describe: 'Modify an exist note',
+  builder: {
+    user: {
+      describe: 'Username',
+      demandOption: true,
+      type: 'string',
+    },
+
+    title: {
+      describe: 'Notes\' title',
+      demandOption: true,
+      type: 'string',
+    },
+
+    body: {
+      describe: 'Body\'s title',
+      demandOption: true,
+      type: 'string',
+    },
+
+    color: {
+      describe: 'Color\'s note. Blue on unknown color.',
+      demandOption: true,
+      type: 'string',
+    },
+  },
+  handler(argv: any) {
+    if (typeof argv.user === 'string' && typeof argv.title === 'string' &&
+    typeof argv.color === 'string' && typeof argv.body === 'string') {
+      let modifyColor: colors = colors.Blue;
+
+      Object.values(colors).forEach((element) => {
+        if (element === argv.color) modifyColor = element;
+      });
+      notes.modifyNote(argv.user, argv.title, argv.body, modifyColor);
+    }
+  },
+});
+
+/**
+ * Yargs execution of the remove command. The corresponding command line options must be included
+ */
+yargs.command({
+  command: 'remove',
+  describe: 'Remove an existing note',
+  builder: {
+    user: {
+      describe: 'Username',
+      demandOption: true,
+      type: 'string',
+    },
+    title: {
+      describe: 'Notes\' title',
+      demandOption: true,
+      type: 'string',
+    },
+  },
+  handler(argv) {
+    if (typeof argv.user === 'string' && typeof argv.title === 'string') {
+      notes.removeNote(argv.user, argv.title);
+    }
+  },
+});
+
+/**
+ * Yargs execution of the list command. The corresponding command line options must be included
+ */
+yargs.command({
+  command: 'list',
+  describe: 'List notes from a user',
+  builder: {
+    user: {
+      describe: 'Username',
+      demandOption: true,
+      type: 'string',
+    },
+  },
+  handler(argv) {
+    if (typeof argv.user === 'string') {
+      notes.listNotes(argv.user);
+    }
+  },
+});
+
+/**
+ * Yargs execution of the read command. The corresponding command line options must be included
+ */
+yargs.command({
+  command: 'read',
+  describe: 'read an existing note',
+  builder: {
+    user: {
+      describe: 'Username',
+      demandOption: true,
+      type: 'string',
+    },
+    title: {
+      describe: 'Notes\' title',
+      demandOption: true,
+      type: 'string',
+    },
+  },
+  handler(argv) {
+    if (typeof argv.user === 'string' && typeof argv.title === 'string') {
+      notes.readNote(argv.user, argv.title);
+    }
+  },
+});
+
+/**
+ * Process arguments passed from command line to application
+ */
+yargs.parse();
+
+```
+* **Uso de app.ts**
+
+En este fichero empleamos el módulo `yargs`, así como los métodos de la clase que creamos previamente (Notes).
+
+Para crear un nuevo comando mediante yargs, debemos usar el método `command`, dentro de este método podemos especificar las siguientes opciones:
+
+* **command**: El nombre de una de las acciones que se puede realizar
+* **describe**: Descripción de la acción a realizar
+* **builder**: Dentro de este apartado se indicarán todas las opciones que tiene la acción, estas son:
+  * **describe**: Nombre del argumento
+  * **demandOption**: Indica si es un argumento obligatorio o no
+  * **type**: De que tipo es el argumento recibido
+  * **default**: Se especifíca un valor por defecto
+
+* **handler(argv)**: Mediante este método obtenemos todos los argumentos, junto con sus valores, que se hayan especificado dentro de **builder**, estos se encuentran en formato **JSON**. Lo que debemos de hacer dentro de este método, es comprobar que los valores introducidos son del tipo adecuado, y cambiarlos si son necesario. Una vez comprobado esto, llamamos a la función de la clase `Notes` correspondiente, si por ejemplo estamos en el comando `add`, llamaremos al método `addNote()`, y así para todos los comandos.
+
+Finalmente debemos llamar a `yargs.parse()`, para procesar argumentos pasados desde la línea de comandos a la aplicación
+
+* **Ejemplos de línea de comandos**
+
+  * **add**: 
+  ```bash 
+  node dist/note.js add --user="daniel" --title="Red note" --body="This is a red note" --color="red"
+  ```
+  * **modify**:
+  ```bash 
+  node dist/note.js modify --user="daniel" --title="Red note" --body="This is a red note overwrited" --color="red"
+  ```
+  * **remove**:
+  ```bash 
+  node dist/note.js remove --user="daniel" --title="Red note"
+  ```
+  * **list**:
+  ```bash 
+  node dist/note.js list --user="daniel"
+  ```
+  * **read**:
+  ```bash 
+  node dist/note.js read --user="daniel" --title="Red note"
+  ```
 
